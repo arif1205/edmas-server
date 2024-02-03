@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String        @id @default(uuid())
+  role                 Role          @default(store_manager)
+  email                String        @unique
+  password             String
+  name                 String
+  dp                   String?       @db.VarChar(500)
+  about                String?
+  applicationsReceived Application[] @relation("ApplicationToRelation")
+  applications         Application[] @relation("ApplicantRelation")
+  Application          Application[]
+}
+
+model Shelf {
+  id       String  @id @default(uuid())
+  shelfNum String
+  row      String
+  column   String?
+  items    Items[]
+}
+
+model Items {
+  id         String @id @default(uuid())
+  name       String
+  quantity   Int
+  image      String @db.VarChar(500)
+  location   Shelf  @relation(fields: [locationId], references: [id])
+  locationId String
+}
+
+model Application {
+  id              String            @id @default(uuid())
+  applicant       User              @relation("ApplicantRelation", fields: [applicantId], references: [id])
+  applicantId     String
+  applicationTo   User              @relation("ApplicationToRelation", fields: [applicationToId], references: [id])
+  applicationToId String
+  type            ApplicationType
+  subject         String
+  body            String
+  items           Item[]
+  status          ApplicationStatus
+  phase           ApplicationPhase
+  timeline        Timeline[]
+  User            User?             @relation(fields: [userId], references: [id])
+  userId          String?
+}
+
+model Item {
+  id            String       @id @default(uuid())
+  quantity      Int
+  Application   Application? @relation(fields: [applicationId], references: [id])
+  applicationId String?
+}
+
+model Timeline {
+  id            String           @id @default(uuid())
+  phase         ApplicationPhase
+  timestamp     DateTime         @default(now())
+  Application   Application?     @relation(fields: [applicationId], references: [id])
+  applicationId String?
+}
+
+model Account {
+  id      String @id @default(uuid())
+  balance Float
+}
+
+model Transaction {
+  id        String          @id @default(uuid())
+  type      TransactionType
+  details   String
+  documents Document[]
+}
+
+model Document {
+  id            String      @id @default(uuid())
+  content       String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId String
+}
+
+enum Role {
+  store_manager
+  dept_head
+  teacher
+  lab_assistant
+  officials
+}
+
+enum ApplicationType {
+  give
+  take
+}
+
+enum ApplicationStatus {
+  Pending
+  Approved
+}
+
+enum ApplicationPhase {
+  sent_to_store_manager
+  sent_to_head
+  approved_by_head
+  approved_by_store_manager
+}
+
+enum TransactionType {
+  expense
+  income
+}
