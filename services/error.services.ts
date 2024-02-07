@@ -1,14 +1,14 @@
 export const getErrorResponse = (err: any, status: number) => {
-	// ** for validation error
 	if (err.name === "ZodError") {
+		// ** for validation error
 		return {
 			status: 403,
 			message: `${err?.issues?.[0]?.path?.join("-")}: ${
 				err?.issues?.[0]?.message
 			}`,
 		};
-		// ** for custom error
 	} else if (err.name === "PrismaClientKnownRequestError") {
+		// ** for custom error
 		if (err.code === "P2002") {
 			const target = err.meta?.target;
 			let errorMessage = "Validation error: ";
@@ -27,12 +27,24 @@ export const getErrorResponse = (err: any, status: number) => {
 			status: 403,
 			message: err?.message,
 		};
+	} else if (err.name === "MulterError") {
+		// ** for multer error
+		return {
+			status: 403,
+			message: err.message,
+		};
+	} else if (err.name === "CustomError") {
+		// ** for custom error
+		return {
+			status: err.status,
+			message: err.message,
+		};
 
 		// ** for internal server error default
 	} else {
 		return {
 			status,
-			message: "Internal Server Error",
+			message: err?.message || "Internal Server Error",
 		};
 	}
 };
