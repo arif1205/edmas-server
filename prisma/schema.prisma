@@ -12,12 +12,14 @@ datasource db {
 
 model User {
   id                   String        @id @default(uuid())
-  role                 Role          @default(store_manager)
+  role                 Role
   email                String        @unique
   password             String
   name                 String
   dp                   String?       @db.VarChar(500)
   about                String?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
   applicationsReceived Application[] @relation("ApplicationToRelation")
   applications         Application[] @relation("ApplicantRelation")
   Application          Application[]
