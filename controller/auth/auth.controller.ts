@@ -3,16 +3,13 @@ import { omit } from "lodash";
 import { CustomError } from "../../custom-class/CustomError";
 import { hashPassword, verifyPassword } from "../../lib/hash";
 import { generateToken } from "../../lib/token";
-import {
-	validate_login_body,
-	validate_registration_body,
-} from "../../lib/validation";
+import { validate_registration_body } from "../../lib/validation";
 import { createUser } from "../../services/auth.services";
 import { get_user_by_email } from "../../services/user.services";
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const req_body = JSON.parse(req.body?.data);
+		const req_body = req.body;
 		const user_body = validate_registration_body(req_body);
 		delete user_body?.confirmPassword;
 		user_body.password = await hashPassword(user_body.password);
@@ -30,7 +27,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const credential_body = validate_login_body(req.body);
+		const credential_body = req.body;
 		const user = await get_user_by_email(credential_body.email);
 		if (!user) {
 			throw {

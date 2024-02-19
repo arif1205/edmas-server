@@ -22,6 +22,11 @@ export const getErrorResponse = (err: any, status: number) => {
 				status: 403,
 				message: errorMessage,
 			};
+		} else if (err.code === "P2025") {
+			return {
+				status: 403,
+				message: err.meta?.cause,
+			};
 		}
 		return {
 			status: 403,

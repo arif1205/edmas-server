@@ -11,7 +11,9 @@ export const loginSchema = z.object({
 			},
 			{ message: "Enter a valid sust email." }
 		),
-	password: z.string().min(6),
+	password: z
+		.string()
+		.min(4, { message: "Password must be at least 4 characters." }),
 });
 
 export const registerSchema = z
@@ -29,9 +31,10 @@ export const registerSchema = z
 					}),
 				}
 			),
-			confirmPassword: z.string().min(6).optional(),
+			confirmPassword: z.string().optional(),
 			isVerified: z.boolean().optional(),
 			about: z.string().optional(),
+			dp: z.string().optional(),
 		})
 	)
 	.superRefine(({ confirmPassword, password }, ctx) => {

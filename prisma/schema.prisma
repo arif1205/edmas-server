@@ -29,8 +29,10 @@ model Shelf {
   id       String  @id @default(uuid())
   shelfNum String
   row      String
-  column   String?
+  column   String
   items    Items[]
+
+  @@unique([shelfNum, row, column])
 }
 
 model Items {

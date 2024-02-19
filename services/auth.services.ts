@@ -1,15 +1,9 @@
-import { Role } from "../index.d";
-import prisma from "../db/db_client";
+import { z } from "zod";
 import { CustomError } from "../custom-class/CustomError";
+import prisma from "../db/db_client";
+import { registerSchema } from "../schema/auth/auth.schema";
 
-type RegistrationBody = {
-	name: string;
-	email: string;
-	role: Role;
-	password: string;
-	about?: string;
-	dp?: string;
-};
+type RegistrationBody = z.infer<typeof registerSchema>;
 
 export const createUser = async (body: RegistrationBody) => {
 	try {
