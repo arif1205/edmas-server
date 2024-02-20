@@ -6,14 +6,30 @@ import { generateToken } from "../../lib/token";
 import { validate_registration_body } from "../../lib/validation";
 import { createUser } from "../../services/auth.services";
 import { get_user_by_email } from "../../services/user.services";
+import { v2 as cloudinary } from "cloudinary";
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const req_body = req.body;
 		const user_body = validate_registration_body(req_body);
+
+		// ** upload dp in cloudinary
+		let file_url: string = "";
+		if (req.file) {
+			await cloudinary.uploader.upload(
+				req.file?.path,
+				function (error: any, result: any) {
+					if (error) {
+						throw error;
+					}
+					file_url = result?.url;
+				}
+			);
+		}
+
 		delete user_body?.confirmPassword;
 		user_body.password = await hashPassword(user_body.password);
-		const user = await createUser({ ...user_body, dp: req.file?.path });
+		const user = await createUser({ ...user_body, dp: file_url });
 
 		res.status(201).json({
 			message: "User registered successfully.",

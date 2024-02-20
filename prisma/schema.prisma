@@ -36,11 +36,11 @@ model Shelf {
 }
 
 model Items {
-  id         String @id @default(uuid())
-  name       String
+  id         String  @id @default(uuid())
+  name       String  @unique
   quantity   Int
-  image      String @db.VarChar(500)
-  location   Shelf  @relation(fields: [locationId], references: [id])
+  image      String?
+  location   Shelf   @relation(fields: [locationId], references: [id])
   locationId String
 }
 

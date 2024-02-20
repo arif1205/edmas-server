@@ -8,11 +8,10 @@ type ShelfPartialBody = z.infer<typeof shelfSchemaPartial>;
 
 export const createShelf = async (body: ShelfBody) => {
 	try {
-		// Create user in database
-		const user = prisma.shelf.create({
+		const shelf = prisma.shelf.create({
 			data: body,
 		});
-		return user;
+		return shelf;
 	} catch (err: any) {
 		throw new CustomError(err?.message, 500);
 	}
@@ -39,14 +38,13 @@ export const updateShelf = async ({
 	body: ShelfPartialBody;
 }) => {
 	try {
-		// Create user in database
-		const user = prisma.shelf.update({
+		const shelf = prisma.shelf.update({
 			where: {
 				id,
 			},
 			data: body,
 		});
-		return user;
+		return shelf;
 	} catch (err: any) {
 		throw new CustomError(err?.message, 500);
 	}
@@ -54,12 +52,12 @@ export const updateShelf = async ({
 
 export const deleteShelf = async (id: string) => {
 	try {
-		const user = prisma.shelf.delete({
+		const shelf = prisma.shelf.delete({
 			where: {
 				id,
 			},
 		});
-		return user;
+		return shelf;
 	} catch (err: any) {
 		throw new CustomError(err?.message, 500);
 	}

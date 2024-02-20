@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { omit } from "lodash";
 import { CustomError } from "../../custom-class/CustomError";
-import { verifyPassword } from "../../lib/hash";
-import { generateToken } from "../../lib/token";
 import {
 	validate_shelf_body,
 	validate_shelf_body_partial,
@@ -13,7 +10,6 @@ import {
 	getAllShelf,
 	updateShelf,
 } from "../../services/shelf.services";
-import { get_user_by_email } from "../../services/user.services";
 
 const create_shelf_controller = async (
 	req: Request,

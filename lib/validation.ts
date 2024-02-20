@@ -1,4 +1,5 @@
 import { loginSchema, registerSchema } from "../schema/auth/auth.schema";
+import { productSchema } from "../schema/product/product.schema";
 import { shelfSchema } from "../schema/shelf/shelf.schema";
 
 export const validate_sust_mail = (email: string): boolean => {
@@ -19,4 +20,12 @@ export const validate_shelf_body = (body: any) => {
 
 export const validate_shelf_body_partial = (body: any) => {
 	return shelfSchema.partial().parse(body);
+};
+
+export const validate_product_body = (body: any) => {
+	return productSchema.parse(body);
+};
+
+export const validate_product_body_partial = (body: any) => {
+	return productSchema.partial().parse(body);
 };
