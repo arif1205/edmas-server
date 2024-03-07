@@ -1,13 +1,9 @@
 import { z } from "zod";
 import { CustomError } from "../custom-class/CustomError";
 import prisma from "../db/db_client";
-import {
-	productSchema,
-	productSchemaPartial,
-} from "../schema/product/product.schema";
+import { productSchema } from "../schema/product/product.schema";
 
 type productBody = z.infer<typeof productSchema>;
-type PartialProductBody = z.infer<typeof productSchemaPartial>;
 
 export const createProduct = async (body: productBody) => {
 	try {

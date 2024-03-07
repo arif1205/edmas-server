@@ -36,12 +36,14 @@ model Shelf {
 }
 
 model Items {
-  id         String  @id @default(uuid())
-  name       String  @unique
-  quantity   Int
-  image      String?
-  location   Shelf   @relation(fields: [locationId], references: [id])
-  locationId String
+  id            String       @id @default(uuid())
+  name          String       @unique
+  quantity      Int
+  image         String?
+  location      Shelf        @relation(fields: [locationId], references: [id])
+  locationId    String
+  Application   Application? @relation(fields: [applicationId], references: [id])
+  applicationId String?
 }
 
 model Application {
@@ -53,27 +55,13 @@ model Application {
   type            ApplicationType
   subject         String
   body            String
-  items           Item[]
-  status          ApplicationStatus
+  status          ApplicationStatus @default(Pending)
   phase           ApplicationPhase
-  timeline        Timeline[]
   User            User?             @relation(fields: [userId], references: [id])
   userId          String?
-}
-
-model Item {
-  id            String       @id @default(uuid())
-  quantity      Int
-  Application   Application? @relation(fields: [applicationId], references: [id])
-  applicationId String?
-}
-
-model Timeline {
-  id            String           @id @default(uuid())
-  phase         ApplicationPhase
-  timestamp     DateTime         @default(now())
-  Application   Application?     @relation(fields: [applicationId], references: [id])
-  applicationId String?
+  items           Items[]
+  itemsId         String[]
+  quantity        Json
 }
 
 model Account {

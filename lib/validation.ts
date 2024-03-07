@@ -1,3 +1,4 @@
+import { applicationSchema } from "../schema/application/application.schema";
 import { loginSchema, registerSchema } from "../schema/auth/auth.schema";
 import { productSchema } from "../schema/product/product.schema";
 import { shelfSchema } from "../schema/shelf/shelf.schema";
@@ -28,4 +29,12 @@ export const validate_product_body = (body: any) => {
 
 export const validate_product_body_partial = (body: any) => {
 	return productSchema.partial().parse(body);
+};
+
+export const validate_application_body = (body: any) => {
+	return applicationSchema.parse(body);
+};
+
+export const validate_application_body_partial = (body: any) => {
+	return applicationSchema.partial().parse(body);
 };
