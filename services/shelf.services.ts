@@ -50,13 +50,15 @@ export const updateShelf = async ({
 	}
 };
 
-export const deleteShelf = async (id: string) => {
+export const deleteShelf = async (id?: string) => {
 	try {
-		const shelf = prisma.shelf.delete({
-			where: {
-				id,
-			},
-		});
+		const shelf = id
+			? prisma.shelf.delete({
+					where: {
+						id,
+					},
+			  })
+			: prisma.shelf.deleteMany();
 		return shelf;
 	} catch (err: any) {
 		throw new CustomError(err?.message, 500);

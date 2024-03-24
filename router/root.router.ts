@@ -13,6 +13,6 @@ rootRouter.use("/auth", authRouter);
 rootRouter.use("/shelf", check_auth, is_manager, shelfRouter);
 rootRouter.use("/product", check_auth, productRouter);
 rootRouter.use("/application", check_auth, applicationRouter);
-rootRouter.use("/default", check_auth, defaultRouter);
+rootRouter.use("/default", check_auth, is_manager, defaultRouter);
 
 export default rootRouter;

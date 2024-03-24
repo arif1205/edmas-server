@@ -87,10 +87,10 @@ const update_shelf_controller = async (
 			throw new CustomError("Shelf could not update", 404);
 		}
 
-		res.status(204).json({
+		res.status(202).json({
 			message: "Shelf updated successfully.",
 			data: shelf,
-			status: 201,
+			status: 202,
 		});
 	} catch (err: any) {
 		next(err);
@@ -121,10 +121,28 @@ const delete_shelf_controller = async (
 	}
 };
 
+export const delete_all_shelf_controller = async (
+	_req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const _deletedShelfs = await deleteShelf();
+
+		res.status(202).json({
+			message: "All shelf deleted successfully.",
+			status: 202,
+		});
+	} catch (err: any) {
+		next(err);
+	}
+};
+
 export default {
 	create_shelf_controller,
 	get_all_shelf_controller,
 	get_all_shelf_by_id_controller,
 	update_shelf_controller,
 	delete_shelf_controller,
+	delete_all_shelf_controller,
 };
