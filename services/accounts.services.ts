@@ -23,7 +23,7 @@ export const createTransaction = async (body: transactionBody) => {
 		const _transaction = prisma.transaction.create({
 			data: {
 				...body,
-				amount: parseFloat(body.amount),
+				amount: parseFloat(body.amount || "0"),
 				...(body.documents
 					? {
 							documents: {
