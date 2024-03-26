@@ -10,7 +10,9 @@ exports.loginSchema = zod_1.z.object({
         .refine((email) => {
         return (0, validation_1.validate_sust_mail)(email);
     }, { message: "Enter a valid sust email." }),
-    password: zod_1.z.string().min(6),
+    password: zod_1.z
+        .string()
+        .min(4, { message: "Password must be at least 4 characters." }),
 });
 exports.registerSchema = zod_1.z
     .intersection(exports.loginSchema, zod_1.z.object({
@@ -22,9 +24,10 @@ exports.registerSchema = zod_1.z
             message: "Select a valid role",
         }),
     }),
-    confirmPassword: zod_1.z.string().min(6).optional(),
+    confirmPassword: zod_1.z.string().optional(),
     isVerified: zod_1.z.boolean().optional(),
     about: zod_1.z.string().optional(),
+    dp: zod_1.z.string().optional(),
 }))
     .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {

@@ -69,6 +69,7 @@ model Transaction {
   id        String          @id @default(uuid())
   type      TransactionType
   details   String
+  amount    Float
   documents Document[]
 }
 

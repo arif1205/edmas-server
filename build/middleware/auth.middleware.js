@@ -8,32 +8,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = void 0;
+exports.check_auth = void 0;
 const CustomError_1 = require("../custom-class/CustomError");
-const db_client_1 = __importDefault(require("../db/db_client"));
-const createUser = (body) => __awaiter(void 0, void 0, void 0, function* () {
+const token_1 = require("../lib/token");
+const check_auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        // Create user in database
-        const user = db_client_1.default.user.create({
-            data: body,
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                role: true,
-                about: true,
-                dp: true,
-                password: false,
-            },
-        });
-        return user;
+        const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+        if (!token) {
+            throw new CustomError_1.CustomError("Unauthorized", 401);
+        }
+        const verified = yield (0, token_1.verifyToken)(token);
+        if (!verified) {
+            throw new CustomError_1.CustomError("Unauthorized", 401);
+        }
+        const decoded = yield (0, token_1.decodeToken)(token);
+        if (!decoded) {
+            throw new CustomError_1.CustomError("Unauthorized", 401);
+        }
+        req.headers.user = decoded;
+        next();
     }
     catch (err) {
-        throw new CustomError_1.CustomError(err === null || err === void 0 ? void 0 : err.message, 500);
+        next(err);
     }
 });
-exports.createUser = createUser;
+exports.check_auth = check_auth;

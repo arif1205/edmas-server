@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getErrorResponse = void 0;
 const getErrorResponse = (err, status) => {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
     if (err.name === "ZodError") {
         // ** for validation error
         return {
@@ -25,6 +25,12 @@ const getErrorResponse = (err, status) => {
             return {
                 status: 403,
                 message: errorMessage,
+            };
+        }
+        else if (err.code === "P2025") {
+            return {
+                status: 403,
+                message: (_g = err.meta) === null || _g === void 0 ? void 0 : _g.cause,
             };
         }
         return {
